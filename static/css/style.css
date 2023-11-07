@@ -6,6 +6,10 @@
 
 }
 
+rect[fcolor = "-1"]{
+  fill: rgb(234, 210, 51);
+  }
+
 rect[fcolor = "0"]{
   fill:rgb(256, 256, 256);
   }
