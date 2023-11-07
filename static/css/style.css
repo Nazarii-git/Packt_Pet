@@ -1,6 +1,69 @@
-h1 {
-    border: 2px #eee solid;
-    color: brown;
-    text-align: center;
-    padding: 10px;
+.tooltip {
+  position: relative;
+  display: inline-block;
+  padding:  0;
+    height: 10px;
+
+}
+
+rect[fcolor = "0"]{
+  fill:rgb(256, 256, 256);
+  }
+
+rect[fcolor = "1"]{
+  fill: rgb(108, 141, 89);
+  }
+
+rect[fcolor = "2"]{
+  fill: rgb(144, 227, 41);
+  }
+
+rect[fcolor = "3"]{
+  fill: rgb(68, 224, 75);
+  }
+
+rect[fcolor = "4"]{
+  fill: rgb(60, 171, 52);
+  }
+
+rect{
+  opacity: 0.5;
+}
+
+
+.tooltip .tooltiptext {
+
+visibility: hidden;
+width: 120px;
+background-color: black;
+color: #fff;
+text-align: center;
+
+border-radius: 6px;
+padding: 5px 0;
+
+  /* Position the tooltip */
+position: absolute;
+z-index: 1;
+bottom: 100%;
+left: 50%;
+margin-left: -60px;
+}
+
+.tooltip:hover .tooltiptext {
+visibility: visible;
+font-size: 15px;
+}
+
+td {
+padding: 0;
+height: 10px;
+}
+tr {
+height: 10px;
+padding: 0;
+}
+table {
+font-size: 0px;
+
 }

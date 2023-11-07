@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{url_for('static', filename= 'css/style.css')}}">
+    <title>Heatmap module</title>
+</head>
+<body>
+<div class="cheatmap">
+<table>
+
+             {% for row in table_data %}
+            <tr>
+                {% for number in row %}
+
+                <td>
+                    <div class="tooltip">
+                        <svg width="10" height="10">
+    <a href="https://www.w3schools.com/html/html5_svg.asp">
+  <rect width="10" height="10" rx="2" fcolor="{{ number[1] }}" />
+        <span class="tooltiptext">{{ number[0] }}</span>
+        </a>
+</svg>
+                         </div>
+</td>
+
+                {% endfor %}
+            </tr>
+        {% endfor %}
+</table>
+</div>
+</body>
+</html>
