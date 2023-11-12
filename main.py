@@ -3,7 +3,7 @@ import random
 from flask import Flask, render_template, request, url_for, flash, redirect
 import sqlite3
 import datetime
-import trash, innit_bd
+import trash, innit_bd, db_manager
 
 
 
@@ -33,16 +33,9 @@ def get_db_connection():
     return conn
 
 
-def check_if_table_exist(table_name):
-    test = coonect.execute("SELECT name FROM sqlite_master WHERE type='table' AND name=?;", (table_name,)).fetchall()
-    if test == []:
-        innit_bd.create_db()
-        return True
-    return True
-
 def create_array_for_heatmap():
     my_history_formated.clear()
-    if check_if_table_exist('days'):
+    if db_manager.check_if_table_exist('days'):
         my_history = coonect.execute('SELECT * FROM days').fetchall()
         fill_missed_dates(my_history, coonect)
         for rows in range(6):
