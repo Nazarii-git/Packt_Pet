@@ -62,15 +62,24 @@ def index():
 
 @app.route('/<date>')
 def date_page(date):
+    test = []
     trash.Screenshot()
-    return render_template('date_page.html', date=date)
+    connection = get_db_connection()
+    tasks = connection.execute('SELECT * FROM tasks').fetchall()
+    date_info = connection.execute('SELECT date, raiting FROM days WHERE date = ?;', [date]).fetchone()
+    connection.commit()
+    connection.close()
+
+
+    return render_template('date_page.html', datetest=date_info, task_array=tasks)
 
 @app.route('/<date>/upd', methods=['GET', 'POST'])
 def date_page_upd(date):
+
     trash.Screenshot()
     if request.method == 'POST':
-        title = request.form["lvl_upd"]
-        upd_db_day(date, int(title))
+        form_data = request.form["lvl_upd"]
+        upd_db_day(date, int(form_data))
 
     return redirect('/')
 
@@ -78,10 +87,14 @@ def date_page_upd(date):
 if __name__ == '__main__':
     coonect = get_db_connection()
     create_array_for_heatmap()
+
     app.run()
+    '''
 
-
-
-
-
-
+    for i in range(10):
+        coonect.cursor().execute("INSERT INTO tasks (task, descr) VALUES (?, ?)",
+                                 ("Wake up", "first try"))
+        coonect.cursor().execute("INSERT INTO tasks (task, descr) VALUES (?, ?)",
+                                 ("Make tea", "black"))
+    coonect.commit()
+'''

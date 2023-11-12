@@ -1,10 +1,12 @@
 import sqlite3
 
 def create_db():
-    connection = sqlite3.connect('database.db')
+    connection = sqlite3.connect('database_full.db')
 
     with open('schema.sql') as f:
-        connection.executescript(f.read())
+        test = connection.executescript(f.read())
+        print(test)
 
     connection.commit()
     connection.close()
+
