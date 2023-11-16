@@ -1,117 +1,139 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1 class="d-flex align-items-center gap-2 py-2">{% block title %}
-        <div class="dropdown">
-  <button class="btn d-block rounded-circle p-3" fcolor={{datetest["raiting"]}} type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+<h1 class="d-flex align-items-center gap-2 py-2">{% block title %}
+    <div class="dropdown">
+        <button aria-expanded="false" class="btn d-block rounded-circle p-3" data-bs-toggle="dropdown"
+                fcolor={{datetest["DailyPerformanceMetrics"]}} id="dropdownMenuButton2" type="button">
 
-  </button>
-    <form action="{{datetest["date"]}}/upd" name="edit_day" method = "POST">
-    <div class="d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-280px" data-bs-theme="light">
+        </button>
+        <form action="{{datetest[" date
+        "]}}/upd" name="edit_day" method = "POST">
+        <div class="d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-280px" data-bs-theme="light">
 
-    <ul class="dropdown-menu list-unstyled mb-0 " aria-labelledby="dropdownMenuButton2">
-      <li><button class="dropdown-item d-flex align-items-center gap-2 py-2" name = "lvl_upd"  value="1">
-        <span class="d-inline-block rounded-circle p-1" fcolor="1"></span>
-        Snail's Pace Sprint
-      </button></li>
-      <li><button class="dropdown-item d-flex align-items-center gap-2 py-2"  name = "lvl_upd" value="2">
-        <span class="d-inline-block rounded-circle p-1"fcolor="2"></span>
-        Slow and Steady
-      </button></li>
-      <li><button class="dropdown-item d-flex align-items-center gap-2 py-2"  name = "lvl_upd" value="3">
-        <span class="d-inline-block  rounded-circle p-1"fcolor="3"></span>
-        Procrastination Pro
-      </button></li>
-      <li><button class="dropdown-item d-flex align-items-center gap-2 py-2"  name = "lvl_upd" value="4">
-        <span class="d-inline-block rounded-circle p-1" fcolor="4"></span>
-        The Productivity Wizard
-      </button></li>
-             <li><button class="dropdown-item d-flex align-items-center gap-2 py-2"  name = "lvl_upd" value="5">
-        <span class="d-inline-block rounded-circle p-1" fcolor="5"></span>
-        Couch Potato Mode
-      </button></li>
-             <li><button class="dropdown-item d-flex align-items-center gap-2 py-2"  name = "lvl_upd" value="6">
-        <span class="d-inline-block rounded-circle p-1" fcolor="6"></span>
-        Chilling Chamber
-      </button></li>
-             <li><button class="dropdown-item d-flex align-items-center gap-2 py-2"  name = "lvl_upd" value="7">
-        <span class="d-inline-block rounded-circle p-1" fcolor="7"></span>
-        Weekend Warrior
-      </button></li>
-    </ul>
-        </form>
-  </div>
-</div>
-      Day {{datetest["date"]}} {% endblock %}</h1>
+            <ul aria-labelledby="dropdownMenuButton2" class="dropdown-menu list-unstyled mb-0 ">
+                <li>
+                    <button class="dropdown-item d-flex align-items-center gap-2 py-2" name="lvl_upd" value="1">
+                        <span class="d-inline-block rounded-circle p-1" fcolor="1"></span>
+                        Snail's Pace Sprint
+                    </button>
+                </li>
+                <li>
+                    <button class="dropdown-item d-flex align-items-center gap-2 py-2" name="lvl_upd" value="2">
+                        <span class="d-inline-block rounded-circle p-1" fcolor="2"></span>
+                        Slow and Steady
+                    </button>
+                </li>
+                <li>
+                    <button class="dropdown-item d-flex align-items-center gap-2 py-2" name="lvl_upd" value="3">
+                        <span class="d-inline-block  rounded-circle p-1" fcolor="3"></span>
+                        Procrastination Pro
+                    </button>
+                </li>
+                <li>
+                    <button class="dropdown-item d-flex align-items-center gap-2 py-2" name="lvl_upd" value="4">
+                        <span class="d-inline-block rounded-circle p-1" fcolor="4"></span>
+                        The Productivity Wizard
+                    </button>
+                </li>
+                <li>
+                    <button class="dropdown-item d-flex align-items-center gap-2 py-2" name="lvl_upd" value="5">
+                        <span class="d-inline-block rounded-circle p-1" fcolor="5"></span>
+                        Couch Potato Mode
+                    </button>
+                </li>
+                <li>
+                    <button class="dropdown-item d-flex align-items-center gap-2 py-2" name="lvl_upd" value="6">
+                        <span class="d-inline-block rounded-circle p-1" fcolor="6"></span>
+                        Chilling Chamber
+                    </button>
+                </li>
+                <li>
+                    <button class="dropdown-item d-flex align-items-center gap-2 py-2" name="lvl_upd" value="7">
+                        <span class="d-inline-block rounded-circle p-1" fcolor="7"></span>
+                        Weekend Warrior
+                    </button>
+                </li>
+            </ul>
+            </form>
+        </div>
+    </div>
+    Day {{datetest["date"]}} {% endblock %}
+</h1>
 
 
 <div class="container">
 
 
-  <div class="row ">
-     <div class="col-md-4 list-group" id="left">
+    <div class="row ">
+        <div class="col-md-4 list-group" id="left">
 
-  <a href="#" class="list-group-item list-group-item-action mt-1" draggable="true">Cras justo odio
-    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            <a class="list-group-item list-group-item-action mt-1" draggable="true" href="#">Cras justo odio
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
     99+
     <span class="visually-hidden">unread messages</span>
   </span></a>
-  <a href="#" class="list-group-item list-group-item-action mt-1"  draggable="true">Dapibus ac facilisis in </a>
-  <a href="#" class="list-group-item list-group-item-action mt-1" draggable="true">Morbi leo risus</a>
-  <a href="#" class="list-group-item list-group-item-action mt-1" draggable="true">Porta ac consectetur ac</a>
-  <a href="#" class="list-group-item list-group-item-action mt-1" draggable="true">Vestibulum at eros</a>
+            <a class="list-group-item list-group-item-action mt-1" draggable="true" href="#">Dapibus ac facilisis
+                in </a>
+            <a class="list-group-item list-group-item-action mt-1" draggable="true" href="#">Morbi leo risus</a>
+            <a class="list-group-item list-group-item-action mt-1" draggable="true" href="#">Porta ac consectetur ac</a>
+            <a class="list-group-item list-group-item-action mt-1" draggable="true" href="#">Vestibulum at eros</a>
 
-     </div>
-       <div class="col-md-5 list-group" id="right">
+        </div>
+        <div class="col-md-5 list-group" id="right">
 
-     </div>
-    <div class="col-md-3 ">
-        <div class="list-group overflow-auto h-75">
-{% for task in task_array %}
+        </div>
+        <div class="col-md-3 ">
+            <div class="list-group overflow-auto h-75">
+                {% for task in task_array %}
 
-    <label class="list-group-item d-flex gap-2">
-      <input class="form-check-input flex-shrink-0" type="checkbox" value="" checked="">
-      <span>
+                <label class="list-group-item d-flex gap-2">
+                    <input checked="" class="form-check-input flex-shrink-0" type="checkbox" value="">
+                    <span>
         {{task["task"]}}
         <small class="d-block text-body-secondary">{{task["descr"]}}</small>
       </span>
-    </label>
+                </label>
 
-{% endfor %}
-              </div>
-      </div>
+                {% endfor %}
+            </div>
+        </div>
 
+    </div>
 </div>
-  </div>
 
 <script>
-  let lists = document.getElementsByClassName("list-group-item")
-  let rightbox = document.getElementById("right")
-  let leftbox = document.getElementById("left")
-  let selected
-  for(let list of lists){
-    list.addEventListener("dragstart", function (e) {
-      selected = e.target
-        rightbox.style.borderStyle = "dotted"
-    })
-    rightbox.addEventListener("dragover", function (e){
-        e.preventDefault()
-      })
-       rightbox.addEventListener("drop", function (e){
-         if (selected !== null){rightbox.appendChild(selected.cloneNode(true))}
-         selected = null
-             rightbox.style.borderStyle = "none"
-       })
-      leftbox.addEventListener("dragover", function (e){
-        e.preventDefault()
-      })
-       leftbox.addEventListener("drop", function (e){
-         if (selected !== null){leftbox.appendChild(selected)}
-         selected = null
+    let lists = document.getElementsByClassName("list-group-item")
+    let rightbox = document.getElementById("right")
+    let leftbox = document.getElementById("left")
+    let selected
+    for (let list of lists) {
+        list.addEventListener("dragstart", function (e) {
+            selected = e.target
+            rightbox.style.borderStyle = "dotted"
+        })
+        rightbox.addEventListener("dragover", function (e) {
+            e.preventDefault()
+        })
+        rightbox.addEventListener("drop", function (e) {
+            if (selected !== null) {
+                rightbox.appendChild(selected.cloneNode(true))
+            }
+            selected = null
+            rightbox.style.borderStyle = "none"
+        })
+        leftbox.addEventListener("dragover", function (e) {
+            e.preventDefault()
+        })
+        leftbox.addEventListener("drop", function (e) {
+            if (selected !== null) {
+                leftbox.appendChild(selected)
+            }
+            selected = null
 
-       })
+        })
 
-  }
+    }
 
 </script>
 {% endblock %}

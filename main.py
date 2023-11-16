@@ -11,43 +11,17 @@ app = Flask(__name__)
 my_history = []
 my_history_formated = []
 
-def fill_missed_dates(db_array, conn):
-    if len(db_array) == 0:
-        delta_days = 366
-    else:
-        delta_days =  (datetime.datetime.now().date() - datetime.datetime.strptime(db_array[-1][1], '%Y-%m-%d').date()).days
-    if delta_days>0:
-        print("need to insert days ", delta_days)
-        for i in range(delta_days, -1 , -1):
-            conn.cursor().execute("INSERT INTO days (date) VALUES (?)",
-                (datetime.date.today()-datetime.timedelta(days=i),))
-        conn.commit()
-    elif delta_days<0:
-        print("DB mistake, need rebuild")
-    else:
-        print("DB looks fine!")
-
-def get_db_connection():
-    conn = sqlite3.connect('database.db', check_same_thread=False)
-    conn.row_factory = sqlite3.Row
-    return conn
 
 
 def create_array_for_heatmap():
     my_history_formated.clear()
-    if db_manager.check_if_table_exist('days'):
-        my_history = coonect.execute('SELECT * FROM days').fetchall()
-        fill_missed_dates(my_history, coonect)
-        for rows in range(6):
-            my_history_formated.append([])
-            for cols in range(61):
-                my_history_formated[rows].append(my_history.pop(-1))
+    my_history = db_manager.get_days_array()
+    for rows in range(6):
+        my_history_formated.append([])
+        for cols in range(61):
+            my_history_formated[rows].append(my_history.pop(-1))
 
-def upd_db_day(day, rait):
-   sql_upd = "UPDATE days SET raiting = ? WHERE date = ?"
-   coonect.cursor().execute("UPDATE days SET raiting=(?) WHERE date=(?)", (rait, day))
-   coonect.commit()
-   create_array_for_heatmap()
+
 @app.route('/')
 def index():
     trash.Screenshot()
@@ -57,13 +31,7 @@ def index():
 def date_page(date):
     test = []
     trash.Screenshot()
-    connection = get_db_connection()
-    tasks = connection.execute('SELECT * FROM tasks').fetchall()
-    date_info = connection.execute('SELECT date, raiting FROM days WHERE date = ?;', [date]).fetchone()
-    connection.commit()
-    connection.close()
-
-
+    tasks, date_info = db_manager.get_datepage_info(date)
     return render_template('date_page.html', datetest=date_info, task_array=tasks)
 
 @app.route('/<date>/upd', methods=['GET', 'POST'])
@@ -72,13 +40,13 @@ def date_page_upd(date):
     trash.Screenshot()
     if request.method == 'POST':
         form_data = request.form["lvl_upd"]
-        upd_db_day(date, int(form_data))
+        db_manager.upd_db_day(date, int(form_data))
+        create_array_for_heatmap()
 
     return redirect('/')
 
 
 if __name__ == '__main__':
-    coonect = get_db_connection()
     create_array_for_heatmap()
 
     app.run()

@@ -15,54 +15,64 @@ def check_if_table_exist(table_name):
     test = conn.execute("SELECT name FROM sqlite_master WHERE type='table' AND name=?;", (table_name,)).fetchall()
     close_db_connection(conn)
     if test == []:
+        print('No DB was found')
         create_db()
     return True
 
 
 
-# In progress area
+# Can be better
 #
 #
 
-def upd_missed_dates(db_array):
+def upd_missed_dates():
     conn = get_db_connection()
-
+    db_array = conn.execute('SELECT * FROM DailyLogs').fetchall()
     if len(db_array) == 0:
         delta_days = 366
+        print("DailyLogs is empty")
     else:
-        delta_days =  (datetime.datetime.now().date() - datetime.datetime.strptime(db_array[-1][1], '%Y-%m-%d').date()).days
+        delta_days = (datetime.datetime.now().date() - datetime.datetime.strptime(db_array[-1][2], '%Y-%m-%d').date()).days
     if delta_days>0:
-        print("need to insert days ", delta_days)
+        print("Need to insert days ", delta_days)
         for i in range(delta_days, -1 , -1):
-            conn.cursor().execute("INSERT INTO days (date) VALUES (?)",
+            conn.cursor().execute("INSERT INTO DailyLogs (Date) VALUES (?)",
                 (datetime.date.today()-datetime.timedelta(days=i),))
-        close_db_connection(conn)
     elif delta_days<0:
         print("DB mistake, need rebuild")
     else:
         print("DB looks fine!")
+    db_array = conn.execute('SELECT * FROM DailyLogs').fetchall()
+    close_db_connection(conn)
+    return db_array
 
 def get_days_array():
     days_array = []
+    if check_if_table_exist('DailyLogs'):
+        days_array = upd_missed_dates()
+        return days_array
+
+
+#
+#
+#
+#
+
+def get_datepage_info(date):
     conn = get_db_connection()
-    if check_if_table_exist('days'):
-        my_history = conn.execute('SELECT * FROM days').fetchall()
-        upd_missed_dates(my_history, conn)
+    tasks = conn.execute('SELECT * FROM Activities').fetchall()
+    date_info = conn.execute('SELECT Date, DailyPerformanceMetrics FROM DailyLogs WHERE Date = ?;', [date]).fetchone()
+    close_db_connection(conn)
+    return tasks, date_info
 
-
-#
-#
-#
-#
-
-
-
-
-
-
+def upd_db_day(day, rait):
+    conn = get_db_connection()
+    conn.cursor().execute("UPDATE DailyLogs SET DailyPerformanceMetrics=(?) WHERE Date=(?)", (rait, day))
+    close_db_connection(conn)
 
 
 def create_db():
+    print('Creating DB')
     connection = get_db_connection()
 
     with open('schema.sql') as f:

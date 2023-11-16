@@ -2,32 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{url_for('static', filename= 'css/style.css')}}">
+    <link href="{{url_for('static', filename= 'css/style.css')}}" rel="stylesheet">
     <title>Heatmap module</title>
 </head>
 <body>
 <div class="cheatmap">
-<table>
+    <table>
 
-             {% for row in table_data %}
-            <tr>
-                {% for number in row %}
+        {% for row in table_data %}
+        <tr>
+            {% for number in row %}
 
-                <td>
-                    <div class="tooltip">
-                        <svg width="10" height="10">
-    <a href="{{ number[1] }}">
-  <rect width="10" height="10" rx="2" fcolor="{{ number[2] }}" />
-        <span class="tooltiptext">{{ number[1] }}</span>
-        </a>
-</svg>
-                         </div>
-</td>
+            <td>
+                <div class="tooltip">
+                    <svg height="10" width="10">
+                        <a href="{{ number[2] }}">
+                            <rect fcolor="{{ number[3] }}" height="10" rx="2" width="10"/>
+                            <span class="tooltiptext">{{ number[2] }}</span>
+                        </a>
+                    </svg>
+                </div>
+            </td>
 
-                {% endfor %}
-            </tr>
+            {% endfor %}
+        </tr>
         {% endfor %}
-</table>
+    </table>
 </div>
 </body>
 </html>

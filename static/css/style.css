@@ -1,98 +1,101 @@
 .tooltip {
-  position: relative;
-  display: inline-block;
-  padding:  0;
+    position: relative;
+    display: inline-block;
+    padding: 0;
     height: 10px;
 
 }
 
-.row>* {
-  max-height: 87vh;
+.row > * {
+    max-height: 87vh;
 }
 
-rect[fcolor = "-1"], .rounded-circle[fcolor = "-1"]{
-  background-color: rgb(231, 232, 239);
-  fill: rgb(231, 232, 239);
-  }
-
-rect[fcolor = "1"], .rounded-circle[fcolor = "1"]{
-  background-color: rgb(208, 231, 210);
-  fill: rgb(208, 231, 210);
-  }
-
-rect[fcolor = "2"], .rounded-circle[fcolor = "2"]{
-  background-color: rgb(176, 217, 177);
-  fill: rgb(176, 217, 177);
-  }
-
-rect[fcolor = "3"], .rounded-circle[fcolor = "3"]{
-  background-color: rgb(121, 172, 120);
-  fill: rgb(121, 172, 120);
-  }
-
-rect[fcolor = "4"], .rounded-circle[fcolor = "4"]{
-  background: rgb(53, 141, 59);
-  fill: rgb(53, 141, 59);
-
-  }
-rect[fcolor = "5"], .rounded-circle[fcolor = "5"]{
-  background-color: rgb(236, 238, 129);
-  fill: rgb(236, 238, 129);
-  }
-
-rect[fcolor = "6"], .rounded-circle[fcolor = "6"]{
-  background-color: rgb(141, 223, 203);
-  fill: rgb(141, 223, 203);
-  }
-
-rect[fcolor = "7"], .rounded-circle[fcolor = "7"]{
-  background-color: rgb(178, 164, 255);
-  fill: rgb(178, 164, 255);
-  }
-
-rect{
-  opacity: 1;
+rect[fcolor = "None"], .rounded-circle[fcolor = "-1"] {
+    background-color: rgb(231, 232, 239);
+    fill: rgb(231, 232, 239);
 }
 
-rect:hover{
-  filter: brightness(0.5);
+rect[fcolor = "1"], .rounded-circle[fcolor = "1"] {
+    background-color: rgb(208, 231, 210);
+    fill: rgb(208, 231, 210);
+}
+
+rect[fcolor = "2"], .rounded-circle[fcolor = "2"] {
+    background-color: rgb(176, 217, 177);
+    fill: rgb(176, 217, 177);
+}
+
+rect[fcolor = "3"], .rounded-circle[fcolor = "3"] {
+    background-color: rgb(121, 172, 120);
+    fill: rgb(121, 172, 120);
+}
+
+rect[fcolor = "4"], .rounded-circle[fcolor = "4"] {
+    background: rgb(53, 141, 59);
+    fill: rgb(53, 141, 59);
+
+}
+
+rect[fcolor = "5"], .rounded-circle[fcolor = "5"] {
+    background-color: rgb(236, 238, 129);
+    fill: rgb(236, 238, 129);
+}
+
+rect[fcolor = "6"], .rounded-circle[fcolor = "6"] {
+    background-color: rgb(141, 223, 203);
+    fill: rgb(141, 223, 203);
+}
+
+rect[fcolor = "7"], .rounded-circle[fcolor = "7"] {
+    background-color: rgb(178, 164, 255);
+    fill: rgb(178, 164, 255);
+}
+
+rect {
+    opacity: 1;
+}
+
+rect:hover {
+    filter: brightness(0.5);
 }
 
 
 .tooltip .tooltiptext {
 
-visibility: hidden;
-width: 120px;
-background-color: black;
-color: #fff;
-text-align: center;
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
 
-border-radius: 6px;
-padding: 5px 0;
-  margin-bottom: 10px;
+    border-radius: 6px;
+    padding: 5px 0;
+    margin-bottom: 10px;
 
-  /* Position the tooltip */
-position: absolute;
-z-index: 1;
-bottom: 100%;
-left: 50%;
-margin-left: -60px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -60px;
 }
 
 .tooltip:hover .tooltiptext {
-visibility: visible;
-font-size: 15px;
+    visibility: visible;
+    font-size: 15px;
 }
 
 td {
-padding: 0;
-height: 10px;
+    padding: 0;
+    height: 10px;
 }
+
 tr {
-height: 10px;
-padding: 0;
+    height: 10px;
+    padding: 0;
 }
+
 table {
-font-size: 0px;
+    font-size: 0px;
 
 }
