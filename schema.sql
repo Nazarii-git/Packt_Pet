@@ -1,20 +1,4 @@
-   /*DROP TABLE IF EXISTS days;
 
-CREATE TABLE days (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    date TIMESTAMP NOT NULL,
-    raiting INTEGER NOT NULL DEFAULT -1
-);
-
-CREATE TABLE tasks (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    task TEXT NOT NULL,
-    descr TEXT,
-    type TEXT,
-    repeat INT DEFAULT 0,
-    date TIMESTAMP
-);
-*/
 
 -- Users Table
 CREATE TABLE IF NOT EXISTS Users (
@@ -31,6 +15,10 @@ CREATE TABLE IF NOT EXISTS Activities (
     ActivityName TEXT,
     Description TEXT,
     Category TEXT,
+    Repeats INTEGER,
+    Points INTEGER,
+    Time TIMESTAMP,
+    Duration INTEGER,
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 

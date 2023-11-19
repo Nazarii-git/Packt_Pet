@@ -1,9 +1,6 @@
-import array
-import random
+
 from flask import Flask, render_template, request, url_for, flash, redirect
-import sqlite3
-import datetime
-import trash, innit_bd, db_manager
+import trash, db_manager
 
 
 
@@ -31,8 +28,8 @@ def index():
 def date_page(date):
     test = []
     trash.Screenshot()
-    tasks, date_info = db_manager.get_datepage_info(date)
-    return render_template('date_page.html', datetest=date_info, task_array=tasks)
+    reg_activity, tasks, date_info = db_manager.get_datepage_info(date)
+    return render_template('date_page.html', datetest=date_info, reg_activity = reg_activity, task_array=tasks)
 
 @app.route('/<date>/upd', methods=['GET', 'POST'])
 def date_page_upd(date):
@@ -50,12 +47,3 @@ if __name__ == '__main__':
     create_array_for_heatmap()
 
     app.run()
-    '''
-
-    for i in range(10):
-        coonect.cursor().execute("INSERT INTO tasks (task, descr) VALUES (?, ?)",
-                                 ("Wake up", "first try"))
-        coonect.cursor().execute("INSERT INTO tasks (task, descr) VALUES (?, ?)",
-                                 ("Make tea", "black"))
-    coonect.commit()
-'''

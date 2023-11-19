@@ -7,8 +7,7 @@
                 fcolor={{datetest["DailyPerformanceMetrics"]}} id="dropdownMenuButton2" type="button">
 
         </button>
-        <form action="{{datetest[" date
-        "]}}/upd" name="edit_day" method = "POST">
+        <form action="{{datetest["date"]}}/upd" name="edit_day" method = "POST">
         <div class="d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-280px" data-bs-theme="light">
 
             <ul aria-labelledby="dropdownMenuButton2" class="dropdown-menu list-unstyled mb-0 ">
@@ -67,18 +66,13 @@
 
     <div class="row ">
         <div class="col-md-4 list-group" id="left">
-
-            <a class="list-group-item list-group-item-action mt-1" draggable="true" href="#">Cras justo odio
+    {% for activity in reg_activity %}
+            <a class="list-group-item list-group-item-action mt-1" draggable="true" href="#">{{activity["ActivityName"]}}
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-    99+
+    {{activity["Repeats"]}}
     <span class="visually-hidden">unread messages</span>
   </span></a>
-            <a class="list-group-item list-group-item-action mt-1" draggable="true" href="#">Dapibus ac facilisis
-                in </a>
-            <a class="list-group-item list-group-item-action mt-1" draggable="true" href="#">Morbi leo risus</a>
-            <a class="list-group-item list-group-item-action mt-1" draggable="true" href="#">Porta ac consectetur ac</a>
-            <a class="list-group-item list-group-item-action mt-1" draggable="true" href="#">Vestibulum at eros</a>
-
+             {% endfor %}
         </div>
         <div class="col-md-5 list-group" id="right">
 
@@ -119,6 +113,7 @@
             if (selected !== null) {
                 rightbox.appendChild(selected.cloneNode(true))
             }
+
             selected = null
             rightbox.style.borderStyle = "none"
         })

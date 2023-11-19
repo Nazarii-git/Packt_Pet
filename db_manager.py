@@ -60,10 +60,11 @@ def get_days_array():
 
 def get_datepage_info(date):
     conn = get_db_connection()
+    reg_activity = conn.execute('SELECT * FROM Activities').fetchall()
     tasks = conn.execute('SELECT * FROM Activities').fetchall()
     date_info = conn.execute('SELECT Date, DailyPerformanceMetrics FROM DailyLogs WHERE Date = ?;', [date]).fetchone()
     close_db_connection(conn)
-    return tasks, date_info
+    return reg_activity, tasks, date_info
 
 def upd_db_day(day, rait):
     conn = get_db_connection()
