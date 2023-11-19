@@ -67,7 +67,7 @@
     <div class="row ">
         <div class="col-md-4 list-group" id="left">
     {% for activity in reg_activity %}
-            <a class="list-group-item list-group-item-action mt-1" draggable="true" href="#">{{activity["ActivityName"]}}
+            <a class="list-group-item list-group-item-action mt-1" draggable="true" href="#"><span class="taskName">{{activity["ActivityName"]}}</span>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" >
     {{activity["Repeats"]}}
   </span></a>
@@ -100,6 +100,9 @@
     let rightbox = document.getElementById("right")
     let leftbox = document.getElementById("left")
     let selected
+
+
+
     for (let list of lists) {
         list.addEventListener("dragstart", function (e) {
             selected = e.target
@@ -114,6 +117,7 @@
                 newItem.getElementsByClassName("rounded-pill")[0].style.display = "none"
                 rightbox.appendChild(newItem)
                 selected.getElementsByClassName("rounded-pill")[0].textContent--
+                marktask(newItem)
             }
             selected = null
             rightbox.style.borderStyle = "none"
@@ -130,6 +134,34 @@
         })
 
     }
+
+
+    let httpRequest;
+    function marktask(task) {
+
+        httpRequest = new XMLHttpRequest();
+        let data = JSON.stringify({'taskName': task.firstChild.textContent})
+        if (!httpRequest) {
+            alert("Giving up :( Cannot create an XMLHTTP instance");
+            return false;
+        }
+
+        httpRequest.open("POST", "ajax");
+        httpRequest.setRequestHeader('Content-Type', 'application/json')
+        httpRequest.send(data)
+    }
+/*
+    function alertContents() {
+      if (httpRequest.readyState === XMLHttpRequest.DONE) {
+        if (httpRequest.status === 200) {
+          alert(httpRequest.responseText);
+        } else {
+          alert("There was a problem with the request.");
+        }
+      }
+    }
+
+ */
 
 </script>
 {% endblock %}

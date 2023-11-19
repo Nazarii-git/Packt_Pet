@@ -72,6 +72,13 @@ def upd_db_day(day, rait):
     close_db_connection(conn)
 
 
+def add_ActivityLog(task):
+    print("Inserting activity to BD")
+    conn = get_db_connection()
+    activityID = conn.execute('SELECT ActivityID, duration FROM Activities WHERE ActivityName = ?;', [task]).fetchone()
+    conn.cursor().execute("INSERT INTO ActivityLog (ActivityID, TimeSpent) VALUES (?,?)", (activityID))
+    close_db_connection(conn)
+
 def create_db():
     print('Creating DB')
     connection = get_db_connection()
@@ -82,4 +89,5 @@ def create_db():
 
     close_db_connection(connection)
 
+add_ActivityLog("English practice")
 

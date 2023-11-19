@@ -1,6 +1,7 @@
 
 from flask import Flask, render_template, request, url_for, flash, redirect
 import trash, db_manager
+import json
 
 
 
@@ -41,6 +42,15 @@ def date_page_upd(date):
         create_array_for_heatmap()
 
     return redirect('/')
+
+@app.route('/ajax', methods=['GET', 'POST'])
+def test():
+    if request.method == 'POST':
+        db_manager.add_ActivityLog(request.get_json()["taskName"])
+    return "200"
+
+
+
 
 
 if __name__ == '__main__':
