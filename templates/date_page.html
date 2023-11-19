@@ -68,9 +68,8 @@
         <div class="col-md-4 list-group" id="left">
     {% for activity in reg_activity %}
             <a class="list-group-item list-group-item-action mt-1" draggable="true" href="#">{{activity["ActivityName"]}}
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" >
     {{activity["Repeats"]}}
-    <span class="visually-hidden">unread messages</span>
   </span></a>
              {% endfor %}
         </div>
@@ -111,9 +110,11 @@
         })
         rightbox.addEventListener("drop", function (e) {
             if (selected !== null) {
-                rightbox.appendChild(selected.cloneNode(true))
+                let newItem = selected.cloneNode(true)
+                newItem.getElementsByClassName("rounded-pill")[0].style.display = "none"
+                rightbox.appendChild(newItem)
+                selected.getElementsByClassName("rounded-pill")[0].textContent--
             }
-
             selected = null
             rightbox.style.borderStyle = "none"
         })
