@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1 class="d-flex align-items-center gap-2 py-2">{% block title %}
+<h1 class="d-flex align-items-center gap-2 py-2">
     <div class="dropdown">
         <button aria-expanded="false" class="btn d-block rounded-circle p-3" data-bs-toggle="dropdown"
                 fcolor={{datetest["DailyPerformanceMetrics"]}} id="dropdownMenuButton2" type="button">
@@ -57,7 +57,7 @@
             </form>
         </div>
     </div>
-    Day {{datetest["date"]}} {% endblock %}
+    Day {% block title %} {{datetest["date"]}} {% endblock %}
 </h1>
 
 
@@ -67,14 +67,68 @@
     <div class="row ">
         <div class="col-md-4 list-group" id="left">
     {% for activity in reg_activity %}
-            <a class="list-group-item list-group-item-action mt-1" draggable="true" href="#"><span class="taskName">{{activity["ActivityName"]}}</span>
+            <a class="list-group-item list-group-item-action mt-1" id = {{activity["ActivityID"]}} draggable="true" href="#"><span class="taskName">{{activity["ActivityName"]}}</span>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" >
     {{activity["Repeats"]}}
   </span></a>
              {% endfor %}
-        </div>
-        <div class="col-md-5 list-group" id="right">
 
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTaskModal">
+        Add New Task
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTaskModalLabel">Add New Task</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form goes here -->
+                    <form  id ="addTaskForm" onsubmit="addTask(event)">
+                        <div class="mb-3">
+                            <label for="activityName" class="form-label">Activity Name</label>
+                            <input type="text" class="form-control" id="activityName" name="activityName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <input type="text" class="form-control" id="category" name="category">
+                        </div>
+                        <div class="mb-3">
+                            <label for="repeats" class="form-label">Repeats</label>
+                            <input type="number" class="form-control" id="repeats" name="repeats">
+                        </div>
+                        <div class="mb-3">
+                            <label for="points" class="form-label">Points</label>
+                            <input type="number" class="form-control" id="points" name="points">
+                        </div>
+                        <div class="mb-3">
+                            <label for="time" class="form-label">Time</label>
+                            <input type="datetime-local" class="form-control" id="time" name="time">
+                        </div>
+                        <div class="mb-3">
+                            <label for="duration" class="form-label">Duration (in minutes)</label>
+                            <input type="number" class="form-control" id="duration" name="duration">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Task</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+
+
+        <div class="col-md-5 list-group" id="right">
+          {% for activity in day_board %}
+            <a class="list-group-item list-group-item-action mt-1"  draggable="true" href="#">{{activity["ActivityName"]}}</a>
+             {% endfor %}
         </div>
         <div class="col-md-3 ">
             <div class="list-group overflow-auto h-75">
@@ -137,10 +191,11 @@
 
 
     let httpRequest;
+    let currentdate = '{{datetest["date"]}}'
     function marktask(task) {
 
         httpRequest = new XMLHttpRequest();
-        let data = JSON.stringify({'taskName': task.firstChild.textContent})
+        let data = JSON.stringify({'taskName': task.firstChild.textContent, 'date' : currentdate})
         if (!httpRequest) {
             alert("Giving up :( Cannot create an XMLHTTP instance");
             return false;
@@ -150,6 +205,31 @@
         httpRequest.setRequestHeader('Content-Type', 'application/json')
         httpRequest.send(data)
     }
+
+    function addTask(e) {
+        e.preventDefault()
+        addForm = new FormData(document.getElementById('addTaskForm'))
+
+
+        httpRequest = new XMLHttpRequest();
+
+        if (!httpRequest) {
+            alert("Giving up :( Cannot create an XMLHTTP instance");
+            return false;
+        }
+
+        httpRequest.open("POST", "addTaskReq");
+        httpRequest.send(addForm)
+
+
+
+        console.log("Js form add task!")
+
+        return false
+
+    }
+
+
 /*
     function alertContents() {
       if (httpRequest.readyState === XMLHttpRequest.DONE) {

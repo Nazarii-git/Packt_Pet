@@ -1,6 +1,6 @@
 import sqlite3
 import datetime
-
+from uuid import uuid4
 def get_db_connection():
     conn = sqlite3.connect('database_full.db', check_same_thread=False)
     conn.row_factory = sqlite3.Row
@@ -36,8 +36,8 @@ def upd_missed_dates():
     if delta_days>0:
         print("Need to insert days ", delta_days)
         for i in range(delta_days, -1 , -1):
-            conn.cursor().execute("INSERT INTO DailyLogs (Date) VALUES (?)",
-                (datetime.date.today()-datetime.timedelta(days=i),))
+            conn.cursor().execute("INSERT INTO DailyLogs (LogID, Date) VALUES (?, ?)",
+                (str(uuid4()), datetime.date.today()-datetime.timedelta(days=i)))
     elif delta_days<0:
         print("DB mistake, need rebuild")
     else:
@@ -63,21 +63,34 @@ def get_datepage_info(date):
     reg_activity = conn.execute('SELECT * FROM Activities').fetchall()
     tasks = conn.execute('SELECT * FROM Activities').fetchall()
     date_info = conn.execute('SELECT Date, DailyPerformanceMetrics FROM DailyLogs WHERE Date = ?;', [date]).fetchone()
+    day_logs = conn.execute('SELECT ActivityName FROM Activities INNER JOIN ActivityLog '
+                            'ON Activities.ActivityID=ActivityLog.ActivityID WHERE DailyLogID = ?;', [date]).fetchall()
+
+
+
     close_db_connection(conn)
-    return reg_activity, tasks, date_info
+    return reg_activity, tasks, date_info, day_logs
 
 def upd_db_day(day, rait):
     conn = get_db_connection()
     conn.cursor().execute("UPDATE DailyLogs SET DailyPerformanceMetrics=(?) WHERE Date=(?)", (rait, day))
     close_db_connection(conn)
 
-
 def add_ActivityLog(task):
+    print("Inserting activityLog to BD")
+    conn = get_db_connection()
+    activityID = conn.execute('SELECT ActivityID, duration FROM Activities WHERE ActivityName = ?;', [task['taskName']]).fetchone()
+    conn.cursor().execute("INSERT INTO ActivityLog (LogID, ActivityID, TimeSpent, DailyLogID) VALUES (?,?,?,?)", (str(uuid4()), *activityID, task["date"]))
+    close_db_connection(conn)
+
+def add_Activity(task):
     print("Inserting activity to BD")
     conn = get_db_connection()
-    activityID = conn.execute('SELECT ActivityID, duration FROM Activities WHERE ActivityName = ?;', [task]).fetchone()
-    conn.cursor().execute("INSERT INTO ActivityLog (ActivityID, TimeSpent) VALUES (?,?)", (activityID))
+    id = str(uuid4())
+    conn.cursor().execute("INSERT INTO Activities(ActivityID, ActivityName, Description, Category, Repeats, Points, Time, Duration) VALUES (?,?,?,?,?,?,?,?)",
+                          (id, *task))
     close_db_connection(conn)
+    return id
 
 def create_db():
     print('Creating DB')
@@ -89,5 +102,4 @@ def create_db():
 
     close_db_connection(connection)
 
-add_ActivityLog("English practice")
 

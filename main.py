@@ -24,13 +24,17 @@ def create_array_for_heatmap():
 def index():
     trash.Screenshot()
     return render_template('cheatmap.html' , table_data=my_history_formated)
+@app.route('/modal')
+def modal():
+    trash.Screenshot()
+    return render_template('task_modal.html')
 
 @app.route('/<date>')
 def date_page(date):
     test = []
     trash.Screenshot()
-    reg_activity, tasks, date_info = db_manager.get_datepage_info(date)
-    return render_template('date_page.html', datetest=date_info, reg_activity = reg_activity, task_array=tasks)
+    reg_activity, tasks, date_info, day_logs = db_manager.get_datepage_info(date)
+    return render_template('date_page.html', datetest=date_info, reg_activity = reg_activity, task_array=tasks, day_board = day_logs)
 
 @app.route('/<date>/upd', methods=['GET', 'POST'])
 def date_page_upd(date):
@@ -46,9 +50,14 @@ def date_page_upd(date):
 @app.route('/ajax', methods=['GET', 'POST'])
 def test():
     if request.method == 'POST':
-        db_manager.add_ActivityLog(request.get_json()["taskName"])
+        db_manager.add_ActivityLog(request.get_json())
     return "200"
 
+@app.route('/addTaskReq', methods=['GET', 'POST'])
+def addTask():
+    if request.method == 'POST':
+        db_manager.add_Activity(request.form.to_dict().values())
+    return "200"
 
 
 
