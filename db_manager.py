@@ -63,7 +63,7 @@ def get_datepage_info(date):
     reg_activity = conn.execute('SELECT * FROM Activities').fetchall()
     tasks = conn.execute('SELECT * FROM Activities').fetchall()
     date_info = conn.execute('SELECT Date, DailyPerformanceMetrics FROM DailyLogs WHERE Date = ?;', [date]).fetchone()
-    day_logs = conn.execute('SELECT ActivityName FROM Activities INNER JOIN ActivityLog '
+    day_logs = conn.execute('SELECT ActivityName, LogID FROM Activities INNER JOIN ActivityLog '
                             'ON Activities.ActivityID=ActivityLog.ActivityID WHERE DailyLogID = ?;', [date]).fetchall()
 
 
@@ -76,12 +76,20 @@ def upd_db_day(day, rait):
     conn.cursor().execute("UPDATE DailyLogs SET DailyPerformanceMetrics=(?) WHERE Date=(?)", (rait, day))
     close_db_connection(conn)
 
-def add_ActivityLog(task):
+def add_ActivityLog(task):  #Тут костиль по доступу по назві, треба переписати
     print("Inserting activityLog to BD")
     conn = get_db_connection()
     activityID = conn.execute('SELECT ActivityID, duration FROM Activities WHERE ActivityName = ?;', [task['taskName']]).fetchone()
     conn.cursor().execute("INSERT INTO ActivityLog (LogID, ActivityID, TimeSpent, DailyLogID) VALUES (?,?,?,?)", (str(uuid4()), *activityID, task["date"]))
     close_db_connection(conn)
+
+def del_ActivityLog(logID):
+    conn = get_db_connection()
+    print("Deleting activityLog from BD")
+
+    print(conn.cursor().execute("DELETE FROM ActivityLog  WHERE LogID=(?)", (logID,)))
+    close_db_connection(conn)
+
 
 def add_Activity(task):
     print("Inserting activity to BD")

@@ -59,6 +59,11 @@ def addTask():
         db_manager.add_Activity(request.form.to_dict().values())
     return "200"
 
+@app.route('/delTaskReq', methods=['GET', 'POST'])
+def delTask():
+    if request.method == 'POST':
+        db_manager.del_ActivityLog(request.data.decode('ASCII'))  #why is it bytestring?
+    return "200"
 
 
 
