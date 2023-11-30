@@ -61,10 +61,10 @@
 </h1>
 
 
-<div class="container">
+<div class="container h-100">
 
 
-    <div class="row ">
+    <div class="row h-50">
         <div class="col-md-4 list-group" id="left">
             {% for activity in reg_activity %}
             <a class="list-group-item list-group-item-action mt-1" draggable="true" href="#"
@@ -162,6 +162,30 @@
         </div>
 
     </div>
+      <div class="row h-25">
+            <div class="col-3">
+                <div class="container">
+            <div class="circular-progress">
+                <span class="progress-value">0%</span>
+            </div>
+                  <p class="text-center">Day points</p>
+                    </div>
+
+            </div>
+          <div class="col-3">
+                <div class="container">
+            <div class="circular-progress">
+                <span class="progress-value">0%</span>
+            </div>
+                  <p class="text-center">Time usage</p>
+                    </div>
+
+            </div>
+
+
+      </div>
+
+
 </div>
 <script>
     let currentdate = '{{datetest["date"]}}'
@@ -257,7 +281,8 @@
 
     function addTask(e) {
         e.preventDefault()
-        addForm = new FormData(document.getElementById('addTaskForm'))
+        forma = document.getElementById('addTaskForm')
+        addForm = new FormData(forma)
 
         httpRequest = new XMLHttpRequest();
 
@@ -269,7 +294,8 @@
         httpRequest.open("POST", "addTaskReq");
         httpRequest.send(addForm)
 
-
+        $('#addTaskModal').modal('hide')
+        forma.reset()
         console.log("Js form add task!")
 
         return false
@@ -295,18 +321,23 @@
 
 }
 
-    /*
-        function alertContents() {
-          if (httpRequest.readyState === XMLHttpRequest.DONE) {
-            if (httpRequest.status === 200) {
-              alert(httpRequest.responseText);
-            } else {
-              alert("There was a problem with the request.");
-            }
-          }
-        }
+        let circularProgress = document.querySelector(".circular-progress"),
+    progressValue = document.querySelector(".progress-value");
 
-     */
+let progressStartValue = 0,
+    progressEndValue = {{day_points[0]}},
+    speed = 20;
+
+let progress = setInterval(() => {
+    progressStartValue++;
+
+    progressValue.textContent = `${progressStartValue}%`
+    circularProgress.style.background = `conic-gradient(#7d2ae8 ${progressStartValue * 3.6}deg, #ededed 0deg)`
+
+    if(progressStartValue == progressEndValue){
+        clearInterval(progress);
+    }
+}, speed);
 
 </script>
 {% endblock %}

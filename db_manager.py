@@ -61,12 +61,14 @@ def get_days_array():
 def get_datepage_info(date):
     conn = get_db_connection()
     reg_activity = conn.execute('SELECT * FROM Activities').fetchall()
-    tasks = conn.execute('SELECT * FROM Activities').fetchall()
+    tasks = conn.execute('SELECT * FROM Activities WHERE Category = "Task"').fetchall()
     date_info = conn.execute('SELECT Date, DailyPerformanceMetrics FROM DailyLogs WHERE Date = ?;', [date]).fetchone()
     day_logs = conn.execute('SELECT ActivityName, LogID FROM Activities INNER JOIN ActivityLog '
                             'ON Activities.ActivityID=ActivityLog.ActivityID WHERE DailyLogID = ?;', [date]).fetchall()
+    day_points = conn.execute('SELECT sum(Points) FROM (SELECT ActivityName, LogID, Points FROM Activities INNER JOIN ActivityLog '
+                            'ON Activities.ActivityID=ActivityLog.ActivityID WHERE DailyLogID = ?);', [date]).fetchone()
     close_db_connection(conn)
-    return reg_activity, tasks, date_info, day_logs
+    return reg_activity, tasks, date_info, day_logs, day_points
 
 def upd_db_day(lvl_info):
     conn = get_db_connection()

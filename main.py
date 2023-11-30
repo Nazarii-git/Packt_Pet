@@ -33,8 +33,8 @@ def modal():
 def date_page(date):
     test = []
     trash.Screenshot()
-    reg_activity, tasks, date_info, day_logs = db_manager.get_datepage_info(date)
-    return render_template('date_page.html', datetest=date_info, reg_activity = reg_activity, task_array=tasks, day_board = day_logs)
+    reg_activity, tasks, date_info, day_logs, day_points = db_manager.get_datepage_info(date)
+    return render_template('date_page.html', datetest=date_info, reg_activity = reg_activity, task_array=tasks, day_board = day_logs, day_points=day_points)
 
 @app.route('/lvl_upd', methods=['GET', 'POST'])
 def date_page_upd():
