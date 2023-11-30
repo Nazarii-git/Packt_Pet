@@ -7,8 +7,7 @@
                 fcolor={{datetest["DailyPerformanceMetrics"]}} id="dropdownMenuButton2" type="button">
 
         </button>
-        <form action="{{datetest[" date
-        "]}}/upd" name="edit_day" method = "POST">
+        <form>
         <div class="d-block position-static pt-0 mx-0 rounded-3 shadow overflow-hidden w-280px" data-bs-theme="light">
 
             <ul aria-labelledby="dropdownMenuButton2" class="dropdown-menu list-unstyled mb-0 ">
@@ -164,7 +163,41 @@
 
     </div>
 </div>
+<script>
+    let currentdate = '{{datetest["date"]}}'
 
+    function handleButtonClick(event) {
+        event.preventDefault()
+      let coloredButton = document.getElementById("dropdownMenuButton2")
+      let clickedButton = event.target;
+      let targetID = clickedButton.value
+      let data = JSON.stringify({'lvl': targetID, 'date': currentdate})
+       console.log("Lvl_upd")
+        coloredButton.setAttribute("fcolor", targetID)
+       httpRequest = new XMLHttpRequest();
+
+        if (!httpRequest) {
+            alert("Giving up :( Cannot create an XMLHTTP instance");
+            return false;
+        }
+
+        httpRequest.open("POST", "lvl_upd");
+        httpRequest.setRequestHeader('Content-Type', 'application/json')
+        httpRequest.send(data)
+
+
+    return false
+
+    }
+
+    // Get all buttons in the form
+    let buttons = document.getElementsByName("lvl_upd");
+
+    // Attach event listener to each button
+    buttons.forEach(function(button) {
+      button.addEventListener('click', handleButtonClick);
+    });
+  </script>
 <script>
     let lists = document.getElementsByClassName("list-group-item")
     let rightbox = document.getElementById("right")
@@ -257,9 +290,6 @@
         httpRequest.send(targetID)
 
        target.remove()
-
-
-
 
     return false
 

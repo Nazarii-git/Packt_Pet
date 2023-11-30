@@ -36,16 +36,12 @@ def date_page(date):
     reg_activity, tasks, date_info, day_logs = db_manager.get_datepage_info(date)
     return render_template('date_page.html', datetest=date_info, reg_activity = reg_activity, task_array=tasks, day_board = day_logs)
 
-@app.route('/<date>/upd', methods=['GET', 'POST'])
-def date_page_upd(date):
-
-    trash.Screenshot()
+@app.route('/lvl_upd', methods=['GET', 'POST'])
+def date_page_upd():
     if request.method == 'POST':
-        form_data = request.form["lvl_upd"]
-        db_manager.upd_db_day(date, int(form_data))
+        db_manager.upd_db_day(request.get_json())
         create_array_for_heatmap()
-
-    return redirect('/')
+    return "200"
 
 @app.route('/ajax', methods=['GET', 'POST'])
 def test():

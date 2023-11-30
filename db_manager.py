@@ -65,15 +65,12 @@ def get_datepage_info(date):
     date_info = conn.execute('SELECT Date, DailyPerformanceMetrics FROM DailyLogs WHERE Date = ?;', [date]).fetchone()
     day_logs = conn.execute('SELECT ActivityName, LogID FROM Activities INNER JOIN ActivityLog '
                             'ON Activities.ActivityID=ActivityLog.ActivityID WHERE DailyLogID = ?;', [date]).fetchall()
-
-
-
     close_db_connection(conn)
     return reg_activity, tasks, date_info, day_logs
 
-def upd_db_day(day, rait):
+def upd_db_day(lvl_info):
     conn = get_db_connection()
-    conn.cursor().execute("UPDATE DailyLogs SET DailyPerformanceMetrics=(?) WHERE Date=(?)", (rait, day))
+    conn.cursor().execute("UPDATE DailyLogs SET DailyPerformanceMetrics=(?) WHERE Date=(?)", (lvl_info["lvl"], lvl_info["date"]))
     close_db_connection(conn)
 
 def add_ActivityLog(task):  #Тут костиль по доступу по назві, треба переписати
