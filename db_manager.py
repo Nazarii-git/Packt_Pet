@@ -35,9 +35,9 @@ def upd_missed_dates():
         delta_days = (datetime.datetime.now().date() - datetime.datetime.strptime(db_array[-1][2], '%Y-%m-%d').date()).days
     if delta_days>0:
         print("Need to insert days ", delta_days)
-        for i in range(delta_days, -1 , -1):
+        for i in range(delta_days, 0 , -1):
             conn.cursor().execute("INSERT INTO DailyLogs (LogID, Date) VALUES (?, ?)",
-                (str(uuid4()), datetime.date.today()-datetime.timedelta(days=i)))
+                (str(uuid4()), datetime.date.today()-datetime.timedelta(days=i-1)))
     elif delta_days<0:
         print("DB mistake, need rebuild")
     else:

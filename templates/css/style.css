@@ -1,0 +1,145 @@
+/* Google Fonts - Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+
+.container{
+    display: flex;
+    width: 420px;
+    padding: 50px 0;
+    border-radius: 8px;
+    background: #fff;
+    row-gap: 30px;
+    flex-direction: column;
+    align-items: center;
+}
+.circular-progress{
+    position: relative;
+    height: 250px;
+    width: 250px;
+    border-radius: 50%;
+    background: conic-gradient(#7d2ae8 3.6deg, #ededed 0deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.circular-progress::before{
+    content: "";
+    position: absolute;
+    height: 210px;
+    width: 210px;
+    border-radius: 50%;
+    background-color: #fff;
+}
+.progress-value{
+    position: relative;
+    font-size: 40px;
+    font-weight: 600;
+    color: #7d2ae8;
+}
+.text{
+    font-size: 30px;
+    font-weight: 500;
+    color: #606060;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    padding: 0;
+    height: 10px;
+
+}
+
+.row > * {
+    max-height: 87vh;
+}
+
+rect[fcolor = "None"], .rounded-circle[fcolor = "-1"] {
+    background-color: rgb(231, 232, 239);
+    fill: rgb(231, 232, 239);
+}
+
+rect[fcolor = "1"], .rounded-circle[fcolor = "1"] {
+    background-color: rgb(208, 231, 210);
+    fill: rgb(208, 231, 210);
+}
+
+rect[fcolor = "2"], .rounded-circle[fcolor = "2"] {
+    background-color: rgb(176, 217, 177);
+    fill: rgb(176, 217, 177);
+}
+
+rect[fcolor = "3"], .rounded-circle[fcolor = "3"] {
+    background-color: rgb(121, 172, 120);
+    fill: rgb(121, 172, 120);
+}
+
+rect[fcolor = "4"], .rounded-circle[fcolor = "4"] {
+    background: rgb(53, 141, 59);
+    fill: rgb(53, 141, 59);
+
+}
+
+rect[fcolor = "5"], .rounded-circle[fcolor = "5"] {
+    background-color: rgb(236, 238, 129);
+    fill: rgb(236, 238, 129);
+}
+
+rect[fcolor = "6"], .rounded-circle[fcolor = "6"] {
+    background-color: rgb(141, 223, 203);
+    fill: rgb(141, 223, 203);
+}
+
+rect[fcolor = "7"], .rounded-circle[fcolor = "7"] {
+    background-color: rgb(178, 164, 255);
+    fill: rgb(178, 164, 255);
+}
+
+rect {
+    opacity: 1;
+}
+
+rect:hover {
+    filter: brightness(0.5);
+}
+
+
+.tooltip .tooltiptext {
+
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+
+    border-radius: 6px;
+    padding: 5px 0;
+    margin-bottom: 10px;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    font-size: 15px;
+}
+
+td {
+    padding: 0;
+    height: 10px;
+}
+
+tr {
+    height: 10px;
+    padding: 0;
+}
+
+table {
+    font-size: 0px;
+
+}
