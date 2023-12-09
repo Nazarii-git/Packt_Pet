@@ -13,6 +13,7 @@ my_history_formated = []
 
 
 def create_array_for_heatmap():
+    print("create_array_for_heatmap")
     my_history_formated.clear()
     my_history = db_manager.get_days_array()
     for rows in range(6):
