@@ -1,7 +1,8 @@
 
-from flask import Flask, render_template, request, url_for, flash, redirect
+from flask import Flask, render_template, request, url_for, flash, redirect, jsonify
 import trash, db_manager
 import json
+
 
 
 
@@ -55,11 +56,34 @@ def addTask():
         db_manager.add_Activity(request.form.to_dict().values())
     return "200"
 
+@app.route('/EditTaskReq', methods=['GET', 'POST'])
+def EditTask():
+    if request.method == 'POST':
+        db_manager.edit_Activity(list(request.form.to_dict().values()))
+    return "200"
+
+
 @app.route('/delTaskReq', methods=['GET', 'POST'])
 def delTask():
     if request.method == 'POST':
         db_manager.del_ActivityLog(request.data.decode('ASCII'))  #why is it bytestring?
     return "200"
+
+
+@app.route('/detailsTaskReq/<string:task_id>', methods=['GET'])
+def detailsTask(task_id):
+    print("Task details requested, id ", task_id)
+    current_values = db_manager.get_ActivityLog_details(task_id)
+
+    current_values = dict(current_values)
+    dict.__delitem__(current_values, "ActivityID")
+    dict.__delitem__(current_values, "UserID")
+    current_values = json.dumps(current_values)
+
+    print(current_values)
+
+    return current_values
+
 
 
 

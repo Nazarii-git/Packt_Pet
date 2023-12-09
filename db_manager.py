@@ -82,6 +82,13 @@ def add_ActivityLog(task):  #Тут костиль по доступу по на
     conn.cursor().execute("INSERT INTO ActivityLog (LogID, ActivityID, TimeSpent, DailyLogID) VALUES (?,?,?,?)", (str(uuid4()), *activityID, task["date"]))
     close_db_connection(conn)
 
+def get_ActivityLog_details(task):
+    print("Getting activityLog details")
+    conn = get_db_connection()
+    activityID = conn.execute('SELECT * FROM Activities WHERE ActivityID = ?;', [task,]).fetchone()
+    close_db_connection(conn)
+    return activityID
+
 def del_ActivityLog(logID):
     conn = get_db_connection()
     print("Deleting activityLog from BD")
@@ -98,6 +105,20 @@ def add_Activity(task):
                           (id, *task))
     close_db_connection(conn)
     return id
+
+def edit_Activity(task):
+    print("Editing activity in BD")
+    conn = get_db_connection()
+    id = task.pop(-1)
+
+    conn.cursor().execute("""
+        UPDATE Activities
+        SET ActivityName = ?, Description = ?, Category = ?, Repeats = ?, Points = ?, Time = ?, Duration = ?
+        WHERE ActivityID = ?
+    """, (*task, id))
+    close_db_connection(conn)
+    return id
+
 
 def create_db():
     print('Creating DB')

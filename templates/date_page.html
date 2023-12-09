@@ -69,6 +69,7 @@
             {% for activity in reg_activity %}
             <a class="list-group-item list-group-item-action mt-1" draggable="true" href="#"
                id={{activity["ActivityID"]}}><span class="taskName">{{activity["ActivityName"]}}</span>
+                <button onclick="editTask(this)">Edit</button>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
     {{activity["Repeats"]}}
   </span></a>
@@ -91,36 +92,36 @@
                             <!-- Form goes here -->
                             <form id="addTaskForm" onsubmit="addTask(event)">
                                 <div class="mb-3">
-                                    <label class="form-label" for="activityName">Activity Name</label>
-                                    <input class="form-control" id="activityName" name="activityName" required
+                                    <label class="form-label" for="ActivityName">Activity Name</label>
+                                    <input class="form-control" id="ActivityName" name="activityName" required
                                            type="text">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label" for="description">Description</label>
-                                    <textarea class="form-control" id="description" name="description"
+                                    <label class="form-label" for="Description">Description</label>
+                                    <textarea class="form-control" id="Description" name="description"
                                               rows="3"></textarea>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label" for="category">Category</label>
-                                    <input class="form-control" id="category" name="category" type="text">
+                                    <label class="form-label" for="Category">Category</label>
+                                    <input class="form-control" id="Category" name="category" type="text">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label" for="repeats">Repeats</label>
-                                    <input class="form-control" id="repeats" name="repeats" type="number">
+                                    <label class="form-label" for="Repeats">Repeats</label>
+                                    <input class="form-control" id="Repeats" name="repeats" type="number">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label" for="points">Points</label>
-                                    <input class="form-control" id="points" name="points" type="number">
+                                    <label class="form-label" for="Points">Points</label>
+                                    <input class="form-control" id="Points" name="points" type="number">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label" for="time">Time</label>
-                                    <input class="form-control" id="time" name="time" type="datetime-local">
+                                    <label class="form-label" for="Time">Time</label>
+                                    <input class="form-control" id="Time" name="time" type="datetime-local">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label" for="duration">Duration (in minutes)</label>
-                                    <input class="form-control" id="duration" name="duration" type="number">
+                                    <label class="form-label" for="Duration">Duration (in minutes)</label>
+                                    <input class="form-control" id="Duration" name="duration" type="number">
                                 </div>
-                                <button class="btn btn-primary" type="submit">Add Task</button>
+                                <button class="btn btn-primary" type="submit" id="modalbutton">Add Task</button>
                             </form>
                         </div>
                     </div>
@@ -139,7 +140,7 @@
                 </button>
 
                 <div class="dropdown-menu" id="testid1">
-                    <a class="dropdown-item" href="#">Edit</a>
+                    <a class="dropdown-item" id="edit_button" onclick="editTask(this)" href="#">Edit</a>
                     <a class="dropdown-item link-danger" id="fuckthis" onclick="delTask(this)"  href="#">Remove</a>
                 </div>
             </div>
@@ -316,6 +317,84 @@
         httpRequest.send(targetID)
 
        target.remove()
+
+    return false
+
+}
+
+    function saveTask(e) {
+        e.preventDefault()
+        console.log("Saving task")
+        forma = document.getElementById('addTaskForm')
+        addForm = new FormData(forma)
+        addForm.append("id", globaltaskid)
+
+        httpRequest = new XMLHttpRequest();
+
+        if (!httpRequest) {
+            alert("Giving up :( Cannot create an XMLHTTP instance");
+            return false;
+        }
+
+        httpRequest.open("POST", "EditTaskReq");
+        httpRequest.send(addForm)
+
+        $('#addTaskModal').modal('hide')
+        forma.reset()
+        console.log("Js form edit task!")
+
+
+        return false
+    }
+
+
+    // Function to fill the form with current values
+    function fillForm(currentValues) {
+        // Iterate over the current values object
+        for (let field in currentValues) {
+            if (currentValues.hasOwnProperty(field)) {
+                // Access form elements and set values
+                document.getElementById(field).value = currentValues[field];
+            }
+        }
+    }
+
+    let globaltaskid
+// Call the fillForm function when the modal is opened or when needed
+function editTask(e) {
+       console.log("Editing task window")
+       globaltaskid = e.parentNode.id
+
+       let target = e.parentNode
+       let taskId = target.id.toString()
+       let button = document.getElementById("modalbutton")
+       let modaltitle = document.getElementById("addTaskModalLabel")
+       let modalaction = document.getElementById("addTaskForm")
+       modalaction.setAttribute("onsubmit", "saveTask(event)")
+       modaltitle.textContent = "Edit Task"
+       button.textContent = "Save Changes"
+
+
+
+        // AJAX request to get current values from Flask based on task id
+        fetch(`/detailsTaskReq/${taskId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Task not found');
+                }
+                return response.json();
+            })
+            .then(data => fillForm(data))
+            .catch(error => console.error('Error:', error));
+        $('#addTaskModal').modal('show')
+      $('#addTaskModal').on('hidden.bs.modal', function (e) {
+        let button = document.getElementById("modalbutton")
+           let modaltitle = document.getElementById("addTaskModalLabel")
+          modalaction.setAttribute("onsubmit", "addTask(event)")
+           modaltitle.textContent = "Add Task"
+           button.textContent = "Add "
+    })
+
 
     return false
 
