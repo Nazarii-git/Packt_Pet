@@ -1,6 +1,6 @@
 
 from flask import Flask, render_template, request, url_for, flash, redirect, jsonify
-import trash, db_manager
+import db_manager
 import json
 
 
@@ -23,17 +23,17 @@ def create_array_for_heatmap():
 
 @app.route('/')
 def index():
-    trash.Screenshot()
+    #trash.Screenshot()
     return render_template('cheatmap.html' , table_data=my_history_formated)
 @app.route('/modal')
 def modal():
-    trash.Screenshot()
+    #trash.Screenshot()
     return render_template('task_modal.html')
 
 @app.route('/<date>')
 def date_page(date):
     test = []
-    trash.Screenshot()
+    #trash.Screenshot()
     reg_activity, tasks, date_info, day_logs, day_points = db_manager.get_datepage_info(date)
     return render_template('date_page.html', datetest=date_info, reg_activity = reg_activity, task_array=tasks, day_board = day_logs, day_points=day_points)
 
