@@ -1,6 +1,6 @@
 
 from flask import Flask, render_template, request, url_for, flash, redirect, jsonify
-import db_manager, trash
+import db_manager, tra
 import json
 
 
