@@ -26,11 +26,6 @@ def create_array_for_heatmap():
 def index():
     trash.Screenshot()
     return render_template('cheatmap.html' , table_data=my_history_formated)
-@app.route('/modal')
-def modal():
-    trash.Screenshot()
-    return render_template('task_modal.html')
-
 @app.route('/<date>')
 def date_page(date):
     test = []
@@ -57,6 +52,21 @@ def addTask():
         db_manager.add_Activity(request.form.to_dict().values())
     return "200"
 
+@app.route('/addSingleTaskReq', methods=['GET', 'POST'])
+def addSingleTask():
+    if request.method == 'POST':
+        db_manager.add_SignleTask(request.data.decode('ASCII'))
+    return "200"
+
+
+@app.route('/editSingleTaskReq', methods=['POST'])
+def edit_single_task():
+    data = request.get_json()
+    id = data.get('id')
+    value = data.get('value')
+    db_manager.update_duration(id, value)
+    return jsonify(success=True)
+
 @app.route('/EditTaskReq', methods=['GET', 'POST'])
 def EditTask():
     if request.method == 'POST':
@@ -68,6 +78,12 @@ def EditTask():
 def delTask():
     if request.method == 'POST':
         db_manager.del_ActivityLog(request.data.decode('ASCII'))  #why is it bytestring?
+    return "200"
+
+@app.route('/delRegTaskReq', methods=['GET', 'POST'])
+def delRegTaskReq():
+    if request.method == 'POST':
+        db_manager.del_Activity(request.data.decode('ASCII'))  #why is it bytestring?
     return "200"
 
 

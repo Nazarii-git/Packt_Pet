@@ -63,13 +63,11 @@
 
 <div class="container h-100">
 
-
     <div class="row h-50">
         <div class="col-md-4 list-group" id="left">
             {% for activity in reg_activity %}
             <a class="list-group-item list-group-item-action mt-1" draggable="true" href="#"
-               id={{activity["ActivityID"]}}><span class="taskName">{{activity["ActivityName"]}}</span>
-                <button onclick="editTask(this)">Edit</button>
+               id={{activity["ActivityID"]}} data-task-points="{{activity["Points"]}}" onclick="editTask(this)"><span class="taskName">{{activity["ActivityName"]}}</span>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
     {{activity["Repeats"]}}
   </span></a>
@@ -122,6 +120,7 @@
                                     <input class="form-control" id="Duration" name="duration" type="number">
                                 </div>
                                 <button class="btn btn-primary" type="submit" id="modalbutton">Add Task</button>
+                                <button class="btn btn-danger" onclick="delregTask()" id="delbutton">Delete Task</button>
                             </form>
                         </div>
                     </div>
@@ -132,7 +131,7 @@
 
         <div class="col-md-5 list-group" id="right">
             {% for activity in day_board %}
-            <div class="btn-group dropend" id={{activity["LogID"]}}>
+            <div class="btn-group dropend" id={{activity["LogID"]}} data-task-points="{{activity["Points"]}}">
                 <button aria-expanded="false" aria-haspopup="true" class="btn dropdown-toggle"
                         data-bs-toggle='dropdown' type="button">
                    {{activity["ActivityName"]}}
@@ -149,16 +148,13 @@
         <div class="col-md-3 ">
             <div class="list-group overflow-auto h-75">
                 {% for task in task_array %}
-
-                <label class="list-group-item d-flex gap-2">
-                    <input checked="" class="form-check-input flex-shrink-0" type="checkbox" value="">
-                    <span>
-        {{task["task"]}}
-        <small class="d-block text-body-secondary">{{task["descr"]}}</small>
-      </span>
+                <label class="list-group-item d-flex gap-2" id = {{task["ActivityID"]}}>
+                    <input class="form-check-input flex-shrink-0 task-check" data-in-db="{{task["Duration"]}}" type="checkbox" value="">
+        {{task["ActivityName"]}}
                 </label>
 
                 {% endfor %}
+                <input class="form-control" id="inputTaskField" type="text" placeholder="New Task...">
             </div>
         </div>
 
@@ -180,243 +176,23 @@
             </div>
                   <p class="text-center">Time usage</p>
                     </div>
-
             </div>
-
-
       </div>
 
 
 </div>
+<script src="{{url_for('static', filename= 'js/progress_bar.js')}}"></script>
+<script src="{{url_for('static', filename= 'js/lvl_manager.js')}}"></script>
+<script src="{{url_for('static', filename= 'js/drugs_manager.js')}}"></script>
+<script src="{{url_for('static', filename= 'js/task_methods.js')}}"></script>
+
 <script>
-    let currentdate = '{{datetest["date"]}}'
-
-    function handleButtonClick(event) {
-        event.preventDefault()
-      let coloredButton = document.getElementById("dropdownMenuButton2")
-      let clickedButton = event.target;
-      let targetID = clickedButton.value
-      let data = JSON.stringify({'lvl': targetID, 'date': currentdate})
-       console.log("Lvl_upd")
-        coloredButton.setAttribute("fcolor", targetID)
-       httpRequest = new XMLHttpRequest();
-
-        if (!httpRequest) {
-            alert("Giving up :( Cannot create an XMLHTTP instance");
-            return false;
-        }
-
-        httpRequest.open("POST", "lvl_upd");
-        httpRequest.setRequestHeader('Content-Type', 'application/json')
-        httpRequest.send(data)
-
-
-    return false
-
-    }
-
-    // Get all buttons in the form
-    let buttons = document.getElementsByName("lvl_upd");
-
-    // Attach event listener to each button
-    buttons.forEach(function(button) {
-      button.addEventListener('click', handleButtonClick);
-    });
-  </script>
-<script>
-    let lists = document.getElementsByClassName("list-group-item")
-    let rightbox = document.getElementById("right")
-    let leftbox = document.getElementById("left")
-    let selected
-
-
-    for (let list of lists) {
-        list.addEventListener("dragstart", function (e) {
-            selected = e.target
-            rightbox.style.borderStyle = "dotted"
-        })
-        rightbox.addEventListener("dragover", function (e) {
-            e.preventDefault()
-        })
-        rightbox.addEventListener("drop", function (e) {
-            if (selected !== null) {
-                let newItem = selected.cloneNode(true)
-                newItem.getElementsByClassName("rounded-pill")[0].style.display = "none"
-                rightbox.appendChild(newItem)
-                selected.getElementsByClassName("rounded-pill")[0].textContent--
-                marktask(newItem)
-            }
-            selected = null
-            rightbox.style.borderStyle = "none"
-        })
-        leftbox.addEventListener("dragover", function (e) {
-            e.preventDefault()
-        })
-        leftbox.addEventListener("drop", function (e) {
-            if (selected !== null) {
-                leftbox.appendChild(selected)
-            }
-            selected = null
-
-        })
-
-    }
-
-
-    let httpRequest;
-
-
-    function marktask(task) {
-
-        httpRequest = new XMLHttpRequest();
-        let data = JSON.stringify({'taskName': task.firstChild.textContent, 'date': currentdate})
-        if (!httpRequest) {
-            alert("Giving up :( Cannot create an XMLHTTP instance");
-            return false;
-        }
-
-        httpRequest.open("POST", "ajax");
-        httpRequest.setRequestHeader('Content-Type', 'application/json')
-        httpRequest.send(data)
-    }
-
-    function addTask(e) {
-        e.preventDefault()
-        forma = document.getElementById('addTaskForm')
-        addForm = new FormData(forma)
-
-        httpRequest = new XMLHttpRequest();
-
-        if (!httpRequest) {
-            alert("Giving up :( Cannot create an XMLHTTP instance");
-            return false;
-        }
-
-        httpRequest.open("POST", "addTaskReq");
-        httpRequest.send(addForm)
-
-        $('#addTaskModal').modal('hide')
-        forma.reset()
-        console.log("Js form add task!")
-
-        return false
-
-    }
-   function delTask(e) {
-       console.log("Deletign item")
-       let target = e.parentNode.parentNode
-       let targetID = target.id.toString()
-       httpRequest = new XMLHttpRequest();
-
-        if (!httpRequest) {
-            alert("Giving up :( Cannot create an XMLHTTP instance");
-            return false;
-        }
-
-        httpRequest.open("POST", "delTaskReq");
-        httpRequest.send(targetID)
-
-       target.remove()
-
-    return false
-
-}
-
-    function saveTask(e) {
-        e.preventDefault()
-        console.log("Saving task")
-        forma = document.getElementById('addTaskForm')
-        addForm = new FormData(forma)
-        addForm.append("id", globaltaskid)
-
-        httpRequest = new XMLHttpRequest();
-
-        if (!httpRequest) {
-            alert("Giving up :( Cannot create an XMLHTTP instance");
-            return false;
-        }
-
-        httpRequest.open("POST", "EditTaskReq");
-        httpRequest.send(addForm)
-
-        $('#addTaskModal').modal('hide')
-        forma.reset()
-        console.log("Js form edit task!")
-
-
-        return false
-    }
-
-
-    // Function to fill the form with current values
-    function fillForm(currentValues) {
-        // Iterate over the current values object
-        for (let field in currentValues) {
-            if (currentValues.hasOwnProperty(field)) {
-                // Access form elements and set values
-                document.getElementById(field).value = currentValues[field];
-            }
-        }
-    }
-
-    let globaltaskid
-// Call the fillForm function when the modal is opened or when needed
-function editTask(e) {
-       console.log("Editing task window")
-       globaltaskid = e.parentNode.id
-
-       let target = e.parentNode
-       let taskId = target.id.toString()
-       let button = document.getElementById("modalbutton")
-       let modaltitle = document.getElementById("addTaskModalLabel")
-       let modalaction = document.getElementById("addTaskForm")
-       modalaction.setAttribute("onsubmit", "saveTask(event)")
-       modaltitle.textContent = "Edit Task"
-       button.textContent = "Save Changes"
-
-
-
-        // AJAX request to get current values from Flask based on task id
-        fetch(`/detailsTaskReq/${taskId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Task not found');
-                }
-                return response.json();
-            })
-            .then(data => fillForm(data))
-            .catch(error => console.error('Error:', error));
-        $('#addTaskModal').modal('show')
-      $('#addTaskModal').on('hidden.bs.modal', function (e) {
-        let button = document.getElementById("modalbutton")
-           let modaltitle = document.getElementById("addTaskModalLabel")
-          modalaction.setAttribute("onsubmit", "addTask(event)")
-           modaltitle.textContent = "Add Task"
-           button.textContent = "Add "
-    })
-
-
-    return false
-
-}
-
-        let circularProgress = document.querySelector(".circular-progress"),
-    progressValue = document.querySelector(".progress-value");
-
-let progressStartValue = 0,
-    progressEndValue = {{day_points[0]}},
-    speed = 20;
-
-let progress = setInterval(() => {
-    progressStartValue++;
-
-    progressValue.textContent = `${progressStartValue}%`
-    circularProgress.style.background = `conic-gradient(#7d2ae8 ${progressStartValue * 3.6}deg, #ededed 0deg)`
-
-    if(progressStartValue == progressEndValue){
-        clearInterval(progress);
-    }
-}, speed);
-
+    let points = {{day_points[0]}}
+   progressbar(points)
+   let currentdate = '{{datetest["date"]}}'
 </script>
+
+
+
+
 {% endblock %}

@@ -1,6 +1,9 @@
 import sqlite3
 import datetime
 from uuid import uuid4
+
+
+
 def get_db_connection():
     conn = sqlite3.connect('database_full.db', check_same_thread=False)
     conn.row_factory = sqlite3.Row
@@ -60,10 +63,15 @@ def get_days_array():
 
 def get_datepage_info(date):
     conn = get_db_connection()
-    reg_activity = conn.execute('SELECT * FROM Activities').fetchall()
+    reg_activity = conn.execute('SELECT ActivityName, Activities.ActivityID, Points, Repeats-ifnull(Done_number, 0) AS Repeats '
+                                'FROM Activities LEFT JOIN (SELECT ActivityID, COUNT(LogID) AS Done_number '
+                                'FROM ActivityLog '
+                                'WHERE DailyLogID > ? GROUP BY ActivityID) AL on Activities.ActivityID = AL.ActivityID WHERE Activities.Category = \'Weekly\''
+                                                                'GROUP BY Activities.ActivityID;', [str(datetime.date.today() - datetime.timedelta(days=7))]).fetchall()
+
     tasks = conn.execute('SELECT * FROM Activities WHERE Category = "Task"').fetchall()
     date_info = conn.execute('SELECT Date, DailyPerformanceMetrics FROM DailyLogs WHERE Date = ?;', [date]).fetchone()
-    day_logs = conn.execute('SELECT ActivityName, LogID FROM Activities INNER JOIN ActivityLog '
+    day_logs = conn.execute('SELECT ActivityName, LogID, Points FROM Activities INNER JOIN ActivityLog '
                             'ON Activities.ActivityID=ActivityLog.ActivityID WHERE DailyLogID = ?;', [date]).fetchall()
     day_points = conn.execute('SELECT sum(Points) FROM (SELECT ActivityName, LogID, Points FROM Activities INNER JOIN ActivityLog '
                             'ON Activities.ActivityID=ActivityLog.ActivityID WHERE DailyLogID = ?);', [date]).fetchone()
@@ -97,6 +105,12 @@ def del_ActivityLog(logID):
     close_db_connection(conn)
 
 
+def del_Activity(logID):
+    conn = get_db_connection()
+    print("Deleting Activity from BD")
+    print(conn.cursor().execute("DELETE FROM Activities WHERE ActivityID=(?)", (logID,)))
+    close_db_connection(conn)
+
 def add_Activity(task):
     print("Inserting activity to BD")
     conn = get_db_connection()
@@ -105,6 +119,22 @@ def add_Activity(task):
                           (id, *task))
     close_db_connection(conn)
     return id
+
+def add_SignleTask(task):
+    print("Inserting add_SignleTask to BD")
+    conn = get_db_connection()
+    id = str(uuid4())
+    conn.cursor().execute("INSERT INTO Activities(ActivityID, ActivityName, Category, Points) VALUES (?,?,?,?)",
+                          (id, task, "Task", 3))
+    close_db_connection(conn)
+
+
+def update_duration(task_id, duration):
+    print("Updating duration in the database")
+    conn = get_db_connection()
+    conn.cursor().execute("UPDATE Activities SET Duration = ? WHERE ActivityID = ?",
+                          (duration, task_id))
+    close_db_connection(conn)
 
 def edit_Activity(task):
     print("Editing activity in BD")
