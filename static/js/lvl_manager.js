@@ -1,6 +1,9 @@
+
+
 function handleButtonClick(event) {
     event.preventDefault()
     let coloredButton = document.getElementById("dropdownMenuButton2")
+    let currentdate = coloredButton.getAttribute("data-date-id")
     let clickedButton = event.target;
     let targetID = clickedButton.value
     let data = JSON.stringify({'lvl': targetID, 'date': currentdate})

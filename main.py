@@ -36,6 +36,7 @@ def date_page(date):
 @app.route('/lvl_upd', methods=['GET', 'POST'])
 def date_page_upd():
     if request.method == 'POST':
+        print("Changing day level, data ", request.get_json())
         db_manager.upd_db_day(request.get_json())
         create_array_for_heatmap()
     return "200"

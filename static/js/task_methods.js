@@ -22,15 +22,15 @@ let checkboxes = document.getElementsByClassName('task-check');
 
             checkboxes[i].checked = flag
 
-
-            checkboxes[i].addEventListener('change', function () {
+            checkboxes[i].addEventListener('change', function (e) {
                 // Check if the current checkbox is checked
                 if (this.checked) {
                     console.log('Checkbox is checked!');
-                    editSingleTask(this, 1)
+                    e.stopPropagation()
                     console.log(this.parentNode.id)
                 } else {
                     console.log('Checkbox is unchecked!');
+
                     editSingleTask(this, 0)
                 }
             });
@@ -73,7 +73,8 @@ function addSingleTask(){
     console.log("Added single task!")
 }
 function marktask(task) {
-
+        let coloredButton = document.getElementById("dropdownMenuButton2")
+    let currentdate = coloredButton.getAttribute("data-date-id")
     httpRequest = new XMLHttpRequest();
     let data = JSON.stringify({'taskName': task.firstChild.textContent, 'date': currentdate})
     if (!httpRequest) {
@@ -189,6 +190,7 @@ function fillForm(currentValues) {
 // Call the fillForm function when the modal is opened or when needed
 function editTask(e) {
     console.log("Editing task window")
+    console.log(e.target)
     globaltaskid = e.id
     let target = e
     let taskId = target.id.toString()

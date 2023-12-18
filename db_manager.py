@@ -1,9 +1,6 @@
 import sqlite3
 import datetime
 from uuid import uuid4
-
-
-
 def get_db_connection():
     conn = sqlite3.connect('database_full.db', check_same_thread=False)
     conn.row_factory = sqlite3.Row
@@ -21,8 +18,6 @@ def check_if_table_exist(table_name):
         print('No DB was found')
         create_db()
     return True
-
-
 
 # Can be better
 #
@@ -73,7 +68,7 @@ def get_datepage_info(date):
     date_info = conn.execute('SELECT Date, DailyPerformanceMetrics FROM DailyLogs WHERE Date = ?;', [date]).fetchone()
     day_logs = conn.execute('SELECT ActivityName, LogID, Points FROM Activities INNER JOIN ActivityLog '
                             'ON Activities.ActivityID=ActivityLog.ActivityID WHERE DailyLogID = ?;', [date]).fetchall()
-    day_points = conn.execute('SELECT sum(Points) FROM (SELECT ActivityName, LogID, Points FROM Activities INNER JOIN ActivityLog '
+    day_points = conn.execute('SELECT ifnull(sum(Points), 0) FROM (SELECT ActivityName, LogID, Points FROM Activities INNER JOIN ActivityLog '
                             'ON Activities.ActivityID=ActivityLog.ActivityID WHERE DailyLogID = ?);', [date]).fetchone()
     close_db_connection(conn)
     return reg_activity, tasks, date_info, day_logs, day_points

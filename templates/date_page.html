@@ -4,7 +4,7 @@
 <h1 class="d-flex align-items-center gap-2 py-2">
     <div class="dropdown">
         <button aria-expanded="false" class="btn d-block rounded-circle p-3" data-bs-toggle="dropdown"
-                fcolor={{datetest["DailyPerformanceMetrics"]}} id="dropdownMenuButton2" type="button">
+                fcolor={{datetest["DailyPerformanceMetrics"]}} id="dropdownMenuButton2" type="button" data-date-id={{datetest["date"]}}>
 
         </button>
         <form>
@@ -148,9 +148,9 @@
         <div class="col-md-3 ">
             <div class="list-group overflow-auto h-75">
                 {% for task in task_array %}
-                <label class="list-group-item d-flex gap-2" id = {{task["ActivityID"]}}>
+                <label class="list-group-item d-flex gap-2" id = {{task["ActivityID"]}} onclick="editTask(this)">
                     <input class="form-check-input flex-shrink-0 task-check" data-in-db="{{task["Duration"]}}" type="checkbox" value="">
-        {{task["ActivityName"]}}
+                  {{task["ActivityName"]}}
                 </label>
 
                 {% endfor %}
@@ -181,15 +181,19 @@
 
 
 </div>
+
 <script src="{{url_for('static', filename= 'js/progress_bar.js')}}"></script>
-<script src="{{url_for('static', filename= 'js/lvl_manager.js')}}"></script>
+<script src="{{url_for('static', filename= 'js/lvl_manager.js')}}"> </script>
 <script src="{{url_for('static', filename= 'js/drugs_manager.js')}}"></script>
 <script src="{{url_for('static', filename= 'js/task_methods.js')}}"></script>
 
+
+
 <script>
     let points = {{day_points[0]}}
+
+
    progressbar(points)
-   let currentdate = '{{datetest["date"]}}'
 </script>
 
 
